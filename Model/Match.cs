@@ -20,7 +20,7 @@ namespace Model
         public Dictionary<string, int> AvailableStock { get; private set; }
         public Queue<Decision> PendingDecisions { get; set; }
 
-        public Match(List<Member> members)
+        public Match()
         {
             Board = new Board(12, 9);
 
@@ -36,9 +36,13 @@ namespace Model
             SetupStockMarket();
 
             Players = new List<Player>();
-            SetupPlayers(members);
-
             Chains = new List<Chain>();
+        }
+
+        public Match(List<Member> members)
+            : this()
+        {
+            this.SetupPlayers(members);
         }
 
         private void SetupTiles()
@@ -72,7 +76,7 @@ namespace Model
             this.AvailableStock.Add("Tower", 25);
         }
 
-        private void SetupPlayers(IEnumerable<Member> members)
+        public void SetupPlayers(IEnumerable<Member> members)
         {
             foreach (var member in members)
             {
