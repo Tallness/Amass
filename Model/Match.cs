@@ -42,7 +42,7 @@ namespace Model
         public Match(List<Member> members)
             : this()
         {
-            this.SetupPlayers(members);
+            this.AddPlayers(members);
         }
 
         private void SetupTiles()
@@ -76,16 +76,21 @@ namespace Model
             this.AvailableStock.Add("Tower", 25);
         }
 
-        public void SetupPlayers(IEnumerable<Member> members)
+        public void AddPlayers(IEnumerable<Member> members)
         {
             foreach (var member in members)
             {
-                Player p = new Player();
-                p.Member = member;
-                p.Money = 600;
-
-                this.Players.Add(p);
+                AddPlayer(member);
             }
+        }
+
+        public void AddPlayer(Member member)
+        {
+            Player p = new Player();
+            p.Member = member;
+            p.Money = 600;
+
+            this.Players.Add(p);
         }
 
         public List<Tile> GetAdjacentTiles(int tileId)
