@@ -18,7 +18,11 @@ namespace Model
         public IList<Tile> PlayedTiles { get; private set; }
         public List<Chain> Chains { get; set; }
         public Dictionary<string, int> AvailableStock { get; private set; }
+        public Stack<string> CurrentMergerLosers { get; private set; }
+        public string CurrentMergerWinner { get; private set; }
+
         public Queue<Decision> PendingDecisions { get; set; }
+        public MatchPhase CurrentPhase { get; set; }
 
         public Match()
         {
@@ -121,23 +125,37 @@ namespace Model
 
             return temp;
         }
+
+        public void SetMergerWinner(string company)
+        {
+            this.CurrentMergerWinner = company;
+        }
+
+        public void SetMergerLosers(IEnumerable<string> companies)
+        {
+            this.CurrentMergerLosers.Clear();
+            foreach (var company in companies)
+            {
+                this.CurrentMergerLosers.Push(company);
+            }
+        }
     }
 
     public class Player
     {
         public Member Member { get; set; }
         public int Money { get; set; }
-        public Dictionary<Stock,int> StockHoldings { get; set; }
+        public Dictionary<string,int> StockHoldings { get; set; }
         public List<Tile> Tiles { get; set; }
 
         public Player()
         {
             Money = 600;
-            StockHoldings = new Dictionary<Stock, int>();
+            StockHoldings = new Dictionary<string, int>();
             Tiles = new List<Tile>(6);
         }
 
-        public void AddStock(Stock stock, int quantity)
+        public void AddStock(string stock, int quantity)
         {
             if (this.StockHoldings.ContainsKey(stock))
             {
@@ -150,17 +168,28 @@ namespace Model
         }
     }
 
+
+
     public class Decision
     {
         public int PlayerIndex { get; set; }
         public DecisionType Type { get; set; }
-        public Object Data { get; set; }
+        //public Object Data { get; set; }
     }
 
     public enum DecisionType
     {
-        NewChain,
-        MergerOutcome
+        ChooseNewStock,
+        ChooseMergeOrder,
+        DisposeOfStock,
+        PurchaseStock
+    }
+
+    public enum MatchPhase
+    {
+        WaitingForMove,
+        HandlingDecisions,
+        DrawingTile
     }
 
     public static class ThreadSafeRandom
