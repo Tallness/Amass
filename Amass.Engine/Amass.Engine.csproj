@@ -39,13 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\BaseGameAction.cs" />
+    <Compile Include="Actions\ChooseNewStockAction.cs" />
+    <Compile Include="Actions\DisposeOfStockAction.cs" />
+    <Compile Include="Actions\DrawTileAction.cs" />
+    <Compile Include="Actions\PlaceTileAction.cs" />
+    <Compile Include="Actions\PurchaseStockAction.cs" />
+    <Compile Include="Actions\SetMergeOrderAction.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\Amass.Model.csproj">
       <Project>{c93b6f24-83b9-438a-8dc7-62b611f9bd86}</Project>
-      <Name>Model</Name>
+      <Name>Amass.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

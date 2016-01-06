@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{C93B6F24-83B9-438A-8DC7-62B611F9BD86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amass.Model", "Model\Amass.Model.csproj", "{C93B6F24-83B9-438A-8DC7-62B611F9BD86}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleSampler", "ConsoleSampler\ConsoleSampler.csproj", "{2E927D1B-9920-46DC-8D45-4BC570D81EBB}"
 EndProject

@@ -52,9 +52,9 @@
       <Project>{9c200a15-5ffa-4268-bb4a-897ebca63c6c}</Project>
       <Name>Amass.Engine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Model\Model.csproj">
+    <ProjectReference Include="..\Model\Amass.Model.csproj">
       <Project>{c93b6f24-83b9-438a-8dc7-62b611f9bd86}</Project>
-      <Name>Model</Name>
+      <Name>Amass.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
