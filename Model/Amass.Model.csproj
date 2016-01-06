@@ -7,8 +7,8 @@
     <ProjectGuid>{C93B6F24-83B9-438A-8DC7-62B611F9BD86}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Model</RootNamespace>
-    <AssemblyName>Model</AssemblyName>
+    <RootNamespace>Amass.Model</RootNamespace>
+    <AssemblyName>Amass.Model</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
