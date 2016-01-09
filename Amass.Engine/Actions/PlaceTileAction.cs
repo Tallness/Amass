@@ -52,8 +52,10 @@ namespace Amass.Engine.Actions
 
             if (adjacentChains.Count == 0)  //No existing chains, check for new one.
             {
+                Console.WriteLine("Does not extend any existing chains.");
                 if (adjacentTiles.Count > 0)     //New tile creates a new chain.
                 {
+                    Console.WriteLine("New chain created.");
                     Chain c = new Chain();
                     c.Tiles.Add(playedTile);
                     c.Tiles.AddRange(adjacentTiles);
@@ -96,7 +98,14 @@ namespace Amass.Engine.Actions
                 Type = DecisionType.PurchaseStock
             });
 
-            match.CurrentPhase = MatchPhase.HandlingDecisions;
+            if (match.PendingDecisions.Count > 0)
+            {
+                match.CurrentPhase = MatchPhase.HandlingDecisions;
+            }
+            else
+            {
+                match.CurrentPlayerIndex = match.CurrentPlayerIndex == match.Players.Count ? 0 : match.CurrentPlayerIndex + 1;
+            }
         }
 
         public override bool IsValid(Match match)
