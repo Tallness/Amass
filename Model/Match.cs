@@ -41,6 +41,7 @@ namespace Amass.Model
 
             Players = new List<Player>();
             Chains = new List<Chain>();
+            PendingDecisions = new Queue<Decision>();
         }
 
         public Match(List<Member> members)
