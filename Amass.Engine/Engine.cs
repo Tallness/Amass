@@ -1,4 +1,5 @@
-﻿using Amass.Model;
+﻿using Amass.Engine.Actions;
+using Amass.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,7 +84,7 @@ namespace Amass.Engine
             for (int i = 0; i < match.Players.Count; i++)
             {
                 Tile t = match.AvailableTiles.Dequeue();
-                Console.WriteLine("Player {0} draws {1}", i, t.Description);
+                Console.WriteLine("{0} draws {1}", match.Players[i].Member.Name, t.Description);
                 match.PlayedTiles.Add(t);
 
                 if (t.Sequence < bestTile)
@@ -92,7 +93,7 @@ namespace Amass.Engine
                     playerIndex = i;
                 }
             }
-            Console.WriteLine("Player {0} wins.", playerIndex);
+            Console.WriteLine("Player {0} wins.", match.Players[playerIndex].Member.Name);
             match.CurrentPlayerIndex = playerIndex;
         }
 
@@ -110,6 +111,11 @@ namespace Amass.Engine
                 Console.WriteLine();
             }
             match.CurrentPhase = MatchPhase.WaitingForMove;
+        }
+
+        public static void ExecuteAction(Match match,BaseGameAction action)
+        {
+            action.Apply(match);
         }
 
         public static void PlayTile(Match match, int playerIndex, int tileId)
