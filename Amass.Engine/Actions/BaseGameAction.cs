@@ -16,6 +16,11 @@ namespace Amass.Engine.Actions
             _playerIndex = playerId;
         }
 
+        public BaseGameAction()
+        {
+            // TODO: Complete member initialization
+        }
+
         public abstract void Apply(Match match);
         public abstract bool IsValid(Match match);
     }
