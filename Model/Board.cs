@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,35 @@ namespace Amass.Model
             {
                 return Width * Height;
             }
+        }
+
+        public List<int> GetAdjacentSpaces(int spaceId)
+        {
+            var outSpaces = new List<int>();
+            int col = spaceId / this.Height;
+            int row = (spaceId % this.Height);
+
+            if (row > 0)
+            {
+                outSpaces.Add(spaceId-1);
+            }
+
+            if (row < this.Height - 1)
+            {
+                outSpaces.Add(spaceId + 1);
+            }
+
+            if (col > 0)
+            {
+                outSpaces.Add(spaceId - this.Height);
+            }
+
+            if (col < this.Width - 1)
+            {
+                outSpaces.Add(spaceId + this.Height);
+            }
+
+            return outSpaces;
         }
     }
 

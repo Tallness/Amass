@@ -98,33 +98,26 @@ namespace Amass.Model
             this.Players.Add(p);
         }
 
+        public void AdvancePlayer()
+        {
+            this.CurrentPlayerIndex = this.CurrentPlayerIndex == this.Players.Count-1 ? 0 : this.CurrentPlayerIndex + 1;
+        }
+
         public List<Tile> GetAdjacentTiles(int tileId)
         {
-            List<Tile> temp = new List<Tile>(4);
-            int tileCol = tileId / this.Board.Height;
-            int tileRow = (tileId % this.Board.Height);
+            var spaces = Board.GetAdjacentSpaces(tileId);
+            var tiles = new List<Tile>();
 
-            if (tileRow > 0)
+            foreach (int space in spaces)
             {
-                temp.Add(new Tile(tileId - 1, tileRow - 1, tileCol));
+                //Tile t = new Tile(space, space % this.Board.Height, space/this.Board.Height);
+                if (PlayedTiles.Any(t => t.Sequence == space))
+                {
+                    tiles.Add(new Tile(space, space % this.Board.Height, space / this.Board.Height));
+                }
             }
 
-            if (tileRow < this.Board.Height-1)
-            {
-                temp.Add(new Tile(tileId + 1, tileRow + 1, tileCol));
-            }
-
-            if (tileCol > 0)
-            {
-                temp.Add(new Tile(tileId-this.Board.Height,tileRow,tileCol-1));
-            }
-
-            if (tileCol < this.Board.Width-1)
-            {
-                temp.Add(new Tile(tileId + this.Board.Height, tileRow, tileCol + 1));
-            }
-
-            return temp;
+            return tiles;
         }
 
         public void SetMergerWinner(string company)
