@@ -30,8 +30,7 @@ namespace Amass.Engine.Actions
             playerTiles.Add(match.AvailableTiles.Dequeue());
 
             //Advance player index.
-            match.CurrentPlayerIndex++;
-            if (match.CurrentPlayerIndex >= match.Players.Count) match.CurrentPlayerIndex = 0;
+            match.AdvancePlayer();
 
             match.CurrentPhase = MatchPhase.WaitingForMove;
         }
