@@ -53,7 +53,7 @@ namespace Amass.Engine.Actions
 
             return nextDecision.PlayerIndex == this._playerIndex
                 && nextDecision.Type == DecisionType.ChooseNewStock
-                && !match.Chains.Any(c => c.Company.Equals(_stock));
+                && !match.Chains.Any(c => c.Company!=null && c.Company.Equals(_stock));
         }
     }
 }
