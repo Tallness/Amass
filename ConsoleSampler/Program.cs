@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Amass.Engine;
 using Amass.Model;
+using Amass.Engine.Actions;
 
 
 namespace ConsoleSampler
@@ -40,10 +41,45 @@ namespace ConsoleSampler
 
             while (Console.ReadKey(true).Key != ConsoleKey.Escape)
             {
-                Player p = newMatch.Players[newMatch.CurrentPlayerIndex];
-                Tile t = p.Tiles.First();
-                Console.WriteLine("{0} plays tile: {1}", p.Member.Name, t.Description);
-                Engine.PlayTile(newMatch, newMatch.CurrentPlayerIndex, t.Sequence);
+                BaseGameAction action = null;
+                switch (newMatch.CurrentPhase)
+                {
+                    case MatchPhase.WaitingForMove:
+                        Player p = newMatch.Players[newMatch.CurrentPlayerIndex];
+                        Tile t = p.Tiles.First();
+                        action = new PlaceTile(newMatch.CurrentPlayerIndex, t.Sequence);
+                        Console.WriteLine("{0} plays tile: {1}", p.Member.Name, t.Description);
+                        Engine.ExecuteAction(newMatch, action);
+                        //Engine.PlayTile(newMatch, newMatch.CurrentPlayerIndex, t.Sequence); 
+                        break;
+                    case MatchPhase.HandlingDecisions:
+                        Decision d = newMatch.PendingDecisions.Peek();
+                        Console.WriteLine("Decision Pending for [{0}]:", newMatch.Players[d.PlayerIndex].Member.Name);
+                        Console.WriteLine("   {0}", d.Type);
+                        switch (d.Type)
+                        {
+                            case DecisionType.ChooseNewStock:
+                                action = new ChooseNewStock(d.PlayerIndex, "Tower");
+                                break;
+                            case DecisionType.ChooseMergeOrder:
+                                break;
+                            case DecisionType.DisposeOfStock:
+                                break;
+                            case DecisionType.PurchaseStock:
+                                action = new PurchaseStock(d.PlayerIndex, new Dictionary<string, int>());
+                                break;
+                            default:
+                                break;
+                        }
+                        Engine.ExecuteAction(newMatch, action);
+                        break;
+                    case MatchPhase.DrawingTile:
+                        action = new DrawTile(newMatch.CurrentPlayerIndex);
+                        Engine.ExecuteAction(newMatch, action);
+                        break;
+                    default:
+                        break;
+                }
             }
 
 
