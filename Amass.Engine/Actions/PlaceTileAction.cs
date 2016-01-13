@@ -24,7 +24,6 @@ namespace Amass.Engine.Actions
                 return;
             }
 
-
             var playerTiles = match.Players[_playerIndex].Tiles;
             Tile playedTile = playerTiles.Find(t => t.Sequence == _tileId);
 
@@ -33,27 +32,31 @@ namespace Amass.Engine.Actions
 
             //Find list of spaces adjacent to played tile.
             List<Tile> adjacentTiles = match.GetAdjacentTiles(_tileId);
+            Console.WriteLine("   {0} adjacent tiles on board", adjacentTiles.Count);
 
-            //Check for adjacent chains.
-            List<Chain> adjacentChains = new List<Chain>();
-            Console.Write("Adjacent Tiles: ");
-            foreach (var t in adjacentTiles)
+            if (adjacentTiles.Count > 0)
             {
-                Chain c = match.Chains.FirstOrDefault(ch => ch.Tiles.Contains(t));
-                if (c != null && !adjacentChains.Contains(c))
+
+                Console.WriteLine("   {0} adjacent tiles", adjacentTiles.Count);
+
+                //Check for adjacent chains.
+                List<Chain> adjacentChains = new List<Chain>();
+                Console.Write("Adjacent Tiles: ");
+                foreach (var t in adjacentTiles)
                 {
-                    adjacentChains.Add(c);
+                    Console.Write("   {0}", t.Description);
+                    Chain c = match.Chains.FirstOrDefault(ch => ch.Tiles.Contains(t));
+                    if (c != null && !adjacentChains.Contains(c))
+                    {
+                        adjacentChains.Add(c);
+                    }
+
+                    if (adjacentTiles.IndexOf(t) < adjacentTiles.Count) Console.Write(" | ");
                 }
+                Console.WriteLine();
 
-                Console.Write(t.Description);
-                if (adjacentTiles.IndexOf(t) < 3) Console.Write(" | ");
-            }
-            Console.WriteLine();
 
-            if (adjacentChains.Count == 0)  //No existing chains, check for new one.
-            {
-                Console.WriteLine("Does not extend any existing chains.");
-                if (adjacentTiles.Count > 0)     //New tile creates a new chain.
+                if (adjacentChains.Count == 0)  //No existing chains, new one created.
                 {
                     Console.WriteLine("New chain created.");
                     Chain c = new Chain();
@@ -70,27 +73,26 @@ namespace Amass.Engine.Actions
                     });
                     //match.Players[match.CurrentPlayerIndex].AddStock(match.AvailableStock)
                 }
-            }
-            else if (adjacentChains.Count == 1)    //Tile extends existing chain.
-            {
-                Chain c = adjacentChains.Single();
-                c.Tiles.Add(playedTile);
-                c.Tiles.AddRange(adjacentTiles.Where(t => !c.Tiles.Contains(t)));
-            }
-            else //Tile creates a merger.
-            {
-                adjacentChains.Sort(delegate(Chain a, Chain b)
+                else if (adjacentChains.Count == 1)    //Tile extends existing chain.
                 {
-                    return a.Tiles.Count.CompareTo(b.Tiles.Count);
-                });
-
-                match.PendingDecisions.Enqueue(new Decision
+                    Chain c = adjacentChains.Single();
+                    c.Tiles.Add(playedTile);
+                    c.Tiles.AddRange(adjacentTiles.Where(t => !c.Tiles.Contains(t)));
+                }
+                else //Tile creates a merger.
                 {
-                    PlayerIndex = match.CurrentPlayerIndex,
-                    Type = DecisionType.ChooseMergeOrder
-                });
-            }
+                    adjacentChains.Sort(delegate(Chain a, Chain b)
+                    {
+                        return a.Tiles.Count.CompareTo(b.Tiles.Count);
+                    });
 
+                    match.PendingDecisions.Enqueue(new Decision
+                    {
+                        PlayerIndex = match.CurrentPlayerIndex,
+                        Type = DecisionType.ChooseMergeOrder
+                    });
+                }
+            }
 
             match.PendingDecisions.Enqueue(new Decision
             {
@@ -104,7 +106,7 @@ namespace Amass.Engine.Actions
             }
             else
             {
-                match.CurrentPlayerIndex = match.CurrentPlayerIndex == match.Players.Count ? 0 : match.CurrentPlayerIndex + 1;
+                match.AdvancePlayer();
             }
         }
 
