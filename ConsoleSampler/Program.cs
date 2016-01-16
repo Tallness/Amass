@@ -37,7 +37,6 @@ namespace ConsoleSampler
             Engine.DrawStartingTiles(newMatch);
 
             Console.WriteLine("Press Any key to show next, <Esc> to exit.");
-            ConsoleKeyInfo input;
 
             while (Console.ReadKey(true).Key != ConsoleKey.Escape)
             {
@@ -80,6 +79,7 @@ namespace ConsoleSampler
                     default:
                         break;
                 }
+                Console.WriteLine("-");
             }
 
 
