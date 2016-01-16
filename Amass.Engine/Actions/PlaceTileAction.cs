@@ -36,9 +36,6 @@ namespace Amass.Engine.Actions
 
             if (adjacentTiles.Count > 0)
             {
-
-                Console.WriteLine("   {0} adjacent tiles", adjacentTiles.Count);
-
                 //Check for adjacent chains.
                 List<Chain> adjacentChains = new List<Chain>();
                 Console.Write("Adjacent Tiles: ");
