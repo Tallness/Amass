@@ -22,12 +22,13 @@ namespace Amass.Engine.Actions
                 return;
             }
 
-            //match.PendingDecisions.Dequeue();
 
             var playerTiles = match.Players[_playerIndex].Tiles;
 
             //Draw new tile.
-            playerTiles.Add(match.AvailableTiles.Dequeue());
+            Tile newTile = match.AvailableTiles.Dequeue();
+            playerTiles.Add(newTile);
+            Console.WriteLine(" Drawing tile for [{0}] - {1}", match.Players[_playerIndex].Member.Name, newTile.Description);
 
             //Advance player index.
             match.AdvancePlayer();
