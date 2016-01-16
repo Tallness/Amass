@@ -24,14 +24,15 @@ namespace Amass.Engine.Actions
                 return;
             }
 
+            Console.WriteLine("   Purchasing stock in:");
             match.PendingDecisions.Dequeue();
 
             foreach (var stock in _stocks)
             {
                 match.Players[_playerIndex].AddStock(stock.Key, stock.Value);
 
-                //TODO: Handle money aspect of stock purchase.
                 var price = Engine.GetStockPrice(stock.Key, match);
+                Console.WriteLine("      {1}x {0} - spending {2:C}", stock.Key, stock.Value, stock.Value*price);
                 match.Players[_playerIndex].Money -= stock.Value * price;
                 match.AvailableStock[stock.Key] -= stock.Value;
             }
