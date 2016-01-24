@@ -62,7 +62,11 @@ namespace ConsoleSampler
                         switch (d.Type)
                         {
                             case DecisionType.ChooseNewStock:
-                                action = new ChooseNewStock(d.PlayerIndex, "Tower");
+                                string newCompany = newMatch.AvailableStock
+                                    .Select(s => s.Key)
+                                    .Except(newMatch.Chains.Select(c => c.Company))
+                                    .First();
+                                action = new ChooseNewStock(d.PlayerIndex, newCompany);
                                 break;
                             case DecisionType.ChooseMergeOrder:
                                 break;
