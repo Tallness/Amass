@@ -24,19 +24,26 @@ namespace Amass.Engine.Actions
                 return;
             }
 
-            Console.WriteLine("   Purchasing stock in:");
             match.PendingDecisions.Dequeue();
 
-            foreach (var stock in _stocks)
+            if (this._stocks.Count>0)
             {
-                match.Players[_playerIndex].AddStock(stock.Key, stock.Value);
+                Console.WriteLine("   [{0}] Purchasing stock in: ",match.Players[this._playerIndex].Member.Name);
 
-                var price = Engine.GetStockPrice(stock.Key, match);
-                Console.WriteLine("      {1}x {0} - spending {2:C}", stock.Key, stock.Value, stock.Value*price);
-                match.Players[_playerIndex].Money -= stock.Value * price;
-                match.AvailableStock[stock.Key] -= stock.Value;
+                foreach (var stock in _stocks)
+                {
+                    match.Players[_playerIndex].AddStock(stock.Key, stock.Value);
+
+                    var price = Engine.GetStockPrice(stock.Key, match);
+                    Console.WriteLine("      - {1}x {0} - spending {2:C}", stock.Key, stock.Value, stock.Value * price);
+                    match.Players[_playerIndex].Money -= stock.Value * price;
+                    match.AvailableStock[stock.Key] -= stock.Value;
+                }
             }
-
+            else
+            {
+                Console.WriteLine("   No active chains to purchase stock in");
+            }
             if (match.PendingDecisions.Count == 0)
                 match.CurrentPhase = MatchPhase.DrawingTile;
         }
