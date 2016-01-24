@@ -38,6 +38,10 @@ namespace ConsoleSampler
 
             Console.WriteLine("Press Any key to show next, <Esc> to exit.");
 
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("First turn: [{0}]", newMatch.Players[newMatch.CurrentPlayerIndex].Member.Name);
+            Console.ResetColor();
+
             while (Console.ReadKey(true).Key != ConsoleKey.Escape)
             {
                 BaseGameAction action = null;
@@ -47,14 +51,14 @@ namespace ConsoleSampler
                         Player p = newMatch.Players[newMatch.CurrentPlayerIndex];
                         Tile t = p.Tiles.First();
                         action = new PlaceTile(newMatch.CurrentPlayerIndex, t.Sequence);
-                        Console.WriteLine("{0} plays tile: {1}", p.Member.Name, t.Description);
+                        Console.WriteLine("  Plays tile: {1}", p.Member.Name, t.Description);
                         Engine.ExecuteAction(newMatch, action);
                         //Engine.PlayTile(newMatch, newMatch.CurrentPlayerIndex, t.Sequence); 
                         break;
                     case MatchPhase.HandlingDecisions:
                         Decision d = newMatch.PendingDecisions.Peek();
-                        Console.WriteLine("Decision Pending for [{0}]:", newMatch.Players[d.PlayerIndex].Member.Name);
-                        Console.WriteLine("   {0}", d.Type);
+                        //Console.WriteLine("Decision Pending for [{0}]:", newMatch.Players[d.PlayerIndex].Member.Name);
+                        //Console.WriteLine("   {0}", d.Type);
                         switch (d.Type)
                         {
                             case DecisionType.ChooseNewStock:
@@ -65,7 +69,20 @@ namespace ConsoleSampler
                             case DecisionType.DisposeOfStock:
                                 break;
                             case DecisionType.PurchaseStock:
-                                action = new PurchaseStock(d.PlayerIndex, new Dictionary<string, int>());
+                                var stocks = new Dictionary<string, int>();
+                                switch (newMatch.Chains.Count)
+                                {
+                                    case 0:
+                                        break;
+                                    case 1:
+                                        stocks.Add(newMatch.Chains.First().Company, 2);
+                                        break;
+                                    default:
+                                        stocks.Add(newMatch.Chains[0].Company, 1);
+                                        stocks.Add(newMatch.Chains[1].Company, 1);
+                                        break;
+                                }
+                                action = new PurchaseStock(d.PlayerIndex, stocks);
                                 break;
                             default:
                                 break;
@@ -79,19 +96,20 @@ namespace ConsoleSampler
                     default:
                         break;
                 }
-                Console.WriteLine("-");
+
+                if (newMatch.CurrentPhase == MatchPhase.WaitingForMove)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("New turn: [{0}]", newMatch.Players[newMatch.CurrentPlayerIndex].Member.Name);
+                    Console.ResetColor();
+                }
+
+                if (newMatch.PendingDecisions.Count>0)
+                {
+                    Console.WriteLine("  Decisions pending: {0}", newMatch.PendingDecisions.Count);
+                }
+                //Console.WriteLine("-");
             }
-
-
-
-
-            //foreach (var tile in newMatch.AvailableTiles)
-            //{
-            //    input = Console.ReadKey();
-            //    if (input.Key == ConsoleKey.Escape) break;
-
-            //    Console.WriteLine("Tile: {0}",tile.Description);
-            //}
         }
     }
 }
