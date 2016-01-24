@@ -25,6 +25,7 @@ namespace Amass.Engine.Actions
             }
 
             match.PendingDecisions.Dequeue();
+            Console.WriteLine("   New chain will be: {0}", this._stock);
 
             if (match.AvailableStock[_stock] > 0)
             {

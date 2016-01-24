@@ -28,7 +28,7 @@ namespace Amass.Engine.Actions
             //Draw new tile.
             Tile newTile = match.AvailableTiles.Dequeue();
             playerTiles.Add(newTile);
-            Console.WriteLine(" Drawing tile for [{0}] - {1}", match.Players[_playerIndex].Member.Name, newTile.Description);
+            Console.WriteLine("  Drawing tile for [{0}] - {1}", match.Players[_playerIndex].Member.Name, newTile.Description);
 
             //Advance player index.
             match.AdvancePlayer();
