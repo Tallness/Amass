@@ -27,12 +27,6 @@ namespace Amass.Engine.Actions
             match.PendingDecisions.Dequeue();
             Console.WriteLine("   New chain will be: {0}", this._stock);
 
-            if (match.AvailableStock[_stock] > 0)
-            {
-                match.Players[_playerIndex].AddStock(_stock, 1);
-                match.AvailableStock[_stock] -= 1;
-            }
-
             Chain newChain = match.Chains.First(c => String.IsNullOrEmpty(c.Company));
             newChain.Company = _stock;
 
@@ -42,7 +36,6 @@ namespace Amass.Engine.Actions
                 match.AvailableStock[_stock] -= 1;
                 match.Players[_playerIndex].AddStock(_stock, 1);
             }
-
 
             if (match.PendingDecisions.Count == 0)
                 match.CurrentPhase = MatchPhase.DrawingTile;
