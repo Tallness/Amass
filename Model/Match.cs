@@ -144,7 +144,7 @@ namespace Amass.Model
 
         public Player()
         {
-            Money = 600;
+            Money = 6000;
             StockHoldings = new Dictionary<string, int>();
             Tiles = new List<Tile>(6);
         }
