@@ -50,12 +50,15 @@ namespace Amass.Engine.Actions
 
         public override bool IsValid(Match match)
         {
-            var nextDecision = match.PendingDecisions.First();
+            var nextDecision = match.PendingDecisions.Peek();
             var activeStocks = match.Chains.Select(c => c.Company);
             // TODO: Check for available funds.
+            bool availableFunds = _stocks.Sum(s => Engine.GetStockPrice(s.Key, match) * s.Value)
+                <=match.Players[_playerIndex].Money;
 
             return nextDecision.PlayerIndex == this._playerIndex
                 && nextDecision.Type == DecisionType.PurchaseStock
+                && availableFunds
                 && _stocks.Sum(s => s.Value) <= 3
                 && _stocks.All(s => activeStocks.Contains(s.Key))
                 && _stocks.All(s => match.AvailableStock[s.Key] >= s.Value);
